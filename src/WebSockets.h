@@ -127,6 +127,16 @@
 #define WEBSOCKETS_TCP_TIMEOUT (5000)
 #endif
 
+#ifndef WEBSOCKETS_SSL_HANDSHAKE_TIMEOUT
+// ESP32 WiFiClientSecure handshake timeout in seconds; 0 preserves the core default.
+#define WEBSOCKETS_SSL_HANDSHAKE_TIMEOUT (0)
+#endif
+
+#ifndef WEBSOCKETS_TCP_READ_MAX_DURATION
+// Total blocking read duration in milliseconds; 0 disables the limit.
+#define WEBSOCKETS_TCP_READ_MAX_DURATION (0)
+#endif
+
 #define NETWORK_ESP8266_ASYNC (0)
 #define NETWORK_ESP8266 (1)
 #define NETWORK_W5100 (2)

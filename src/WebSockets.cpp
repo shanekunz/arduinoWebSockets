@@ -608,6 +608,7 @@ bool WebSockets::readCb(WSclient_t * client, uint8_t * out, size_t n, WSreadWait
 
 #else
     unsigned long t = millis();
+    unsigned long readStart = t;
     ssize_t len;
     DEBUG_WEBSOCKETS("[readCb] n: %zu t: %lu\n", n, t);
     while(n > 0) {
@@ -634,6 +635,16 @@ bool WebSockets::readCb(WSclient_t * client, uint8_t * out, size_t n, WSreadWait
             }
             return false;
         }
+
+#if WEBSOCKETS_TCP_READ_MAX_DURATION > 0
+        if((millis() - readStart) > WEBSOCKETS_TCP_READ_MAX_DURATION) {
+            DEBUG_WEBSOCKETS("[readCb] receive max duration exceeded! %lu\n", (millis() - readStart));
+            if(cb) {
+                cb(client, false);
+            }
+            return false;
+        }
+#endif
 
         if(!client->tcp->available()) {
             WEBSOCKETS_YIELD_MORE();

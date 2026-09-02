@@ -261,6 +261,9 @@ void WebSocketsClient::loop(void) {
             }
             _client.ssl = new WEBSOCKETS_NETWORK_SSL_CLASS();
             _client.tcp = _client.ssl;
+#if defined(ESP32) && WEBSOCKETS_SSL_HANDSHAKE_TIMEOUT > 0
+            _client.ssl->setHandshakeTimeout(WEBSOCKETS_SSL_HANDSHAKE_TIMEOUT);
+#endif
             if(_CA_cert) {
                 DEBUG_WEBSOCKETS("[WS-Client] setting CA certificate\n");
 #if defined(ESP32)
